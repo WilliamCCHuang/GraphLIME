@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import torch
 
 from models import GCN
-from explainers import GraphLIME, Greedy, Random
-from utils import prepare_data, train, evaluate, plot_dist
+from explainers import GraphLIME, LIME, Greedy, Random
+from utils import prepare_data, extract_test_nodes, train, evaluate, plot_dist
 
 warnings.filterwarnings('ignore')
 
@@ -25,7 +25,7 @@ def build_args():
     # data
     parser.add_argument('--dataset', type=str, default='Cora', help='dataset')
     parser.add_argument('--train_epochs', type=int, default=200, help='epochs for training a GCN model')
-    parser.add_argument('--test_samples', type=int, default=50, help='number of test samples')
+    parser.add_argument('--test_samples', type=int, default=200, help='number of test samples')
     parser.add_argument('--num_noise', type=int, default=10, help='number of noise features to add')
 
     # GraphLIME
@@ -33,8 +33,11 @@ def build_args():
     parser.add_argument('--rho', type=float, default=0.15, help='rho')
     parser.add_argument('--K', type=int, default=250, help='top-K most importance features')
 
+    # LIME
+    parser.add_argument('--lime_samples', type=int, default=50, help='generate samples for LIME')
+
     # Greedy
-    parser.add_argument('--threshold', type=float, default=0.03, help='threshold for features')
+    parser.add_argument('--greedy_threshold', type=float, default=0.03, help='threshold of features for Greedy')
 
     parser.add_argument('--ymax', type=float, default=1.10, help='max of y-axis')
     parser.add_argument('--seed', type=int, default=42, help='seed')
@@ -59,36 +62,55 @@ def fix_seed(seed):
 def find_noise_feats_by_GraphLIME(model, data, args):
     explainer = GraphLIME(model, hop=args.hop, rho=args.rho)
 
-    test_indices = data.test_mask.cpu().numpy().nonzero()[0]
-    node_indices = np.random.choice(test_indices, args.test_samples).tolist()
+    node_indices = extract_test_nodes(data, args.test_samples)
 
     num_noise_feats = []
-    num_important_feats = []
+    # num_important_feats = []
     for node_idx in tqdm(node_indices, desc='explain node', leave=False):
         coefs = explainer.explain_node(node_idx, data.x, data.edge_index)
 
         feat_indices = coefs.argsort()[-args.K:]
         feat_indices = [idx for idx in feat_indices if coefs[idx] > 0.0]
-        num_important_feats.append(len(feat_indices))
+        # num_important_feats.append(len(feat_indices))
 
         num_noise_feat = sum(idx >= INPUT_DIM[args.dataset] for idx in feat_indices)
         num_noise_feats.append(num_noise_feat)
 
-    return num_important_feats, num_noise_feats
+    return num_noise_feats
+    # return num_important_feats, num_noise_feats
+
+
+def find_noise_feats_by_LIME(model, data, args):
+    explainer = LIME(model, args.lime_samples)
+
+    node_indices = extract_test_nodes(data, args.test_samples)
+
+    num_noise_feats = []
+    for node_idx in tqdm(node_indices, desc='explain node', leave=False):
+        coefs = explainer.explain_node(node_idx, data.x, data.edge_index)
+        # pprint(coefs)
+        coefs = np.abs(coefs)
+
+        feat_indices = coefs.argsort()[-args.K:]
+        # feat_indices = [idx for idx in feat_indices if coefs[idx] > args.lime_threshold]
+
+        num_noise_feat = sum(idx >= INPUT_DIM[args.dataset] for idx in feat_indices)
+        num_noise_feats.append(num_noise_feat)
+
+    return num_noise_feats
 
 
 def find_noise_feats_by_greedy(model, data, args):
     explainer = Greedy(model)
 
-    test_indices = data.test_mask.cpu().numpy().nonzero()[0]
-    node_indices = np.random.choice(test_indices, args.test_samples).tolist()
+    node_indices = extract_test_nodes(data, args.test_samples)
 
     delta_probas = explainer.explain_node(node_indices, data.x, data.edge_index)  # (#test_smaples, #feats)
     feat_indices = delta_probas.argsort(axis=-1)[:, -args.K:]  # (#test_smaples, K)
 
     num_noise_feats = []
     for node_proba, node_feat_indices in zip(delta_probas, feat_indices):
-        node_feat_indices = [feat_idx for feat_idx in node_feat_indices if node_proba[feat_idx] > args.threshold]
+        node_feat_indices = [feat_idx for feat_idx in node_feat_indices if node_proba[feat_idx] > args.greedy_threshold]
         num_noise_feats.append(sum(feat_idx >= INPUT_DIM[args.dataset] for feat_idx in node_feat_indices))
 
     return num_noise_feats
@@ -134,12 +156,12 @@ def main():
         exit()
     
     print('=== Explain by GraphLIME ===')
-    important_feats, noise_feats = find_noise_feats_by_GraphLIME(model, data, args)
-    # print('# important feats:', len(important_feats))
-    # print(important_feats)
-    # print('# noise feats:', len(noise_feats))
-    # print(noise_feats)
+    noise_feats = find_noise_feats_by_GraphLIME(model, data, args)
     plot_dist(noise_feats, label='GraphLIME', ymax=args.ymax, color='g')
+
+    print('=== Explain by LIME ===')
+    noise_feats = find_noise_feats_by_LIME(model, data, args)
+    plot_dist(noise_feats, label='LIME', ymax=args.ymax, color='C0')
 
     print('=== Explain by Greedy ===')
     noise_feats = find_noise_feats_by_greedy(model, data, args)
