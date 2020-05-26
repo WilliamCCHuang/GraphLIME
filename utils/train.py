@@ -14,6 +14,7 @@ def train(model, data, args, verbose=True):
 
     best = np.inf
     bad_counter = 0
+    model_path = 'model.pth'
     for epoch in tqdm(range(args.train_epochs), desc='Training', leave=False):
         if epoch == 0:
             print('       |     Trainging     |     Validation     |')
@@ -37,7 +38,6 @@ def train(model, data, args, verbose=True):
                                                                                val_loss.item(),
                                                                                val_acc.item())
             
-            model_path = 'gcn.pth'
             torch.save(model.state_dict(), model_path)
             log += ' save model to {}'.format(model_path)
             
@@ -50,7 +50,7 @@ def train(model, data, args, verbose=True):
 
     print('-------------------------------------------------')
 
-    model.load_state_dict(torch.load('gcn.pth'))
+    model.load_state_dict(torch.load(model_path))
 
 
 def train_on_epoch(model, optimizer, data):
