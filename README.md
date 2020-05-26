@@ -33,9 +33,10 @@ sh scripts/noise_features_cora.sh
 
 ### Filter Unuseless Features
 
-|          Cora          |          Pubmed          |
-:-----------------------:|:------------------------:|
-| ![](./images/cora.png) | ![](./images/pubmed.png) |
+<p float="center">
+  <img src="./images/cora.png" width="450" />
+  <img src="./images/pubmed.png" width="450" />
+</p>
 
 ## Requirements
 
