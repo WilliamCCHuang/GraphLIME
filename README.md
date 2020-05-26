@@ -31,7 +31,11 @@ sh scripts/noise_features_cora.sh
 
 ## Results
 
-![](./images/cora.png)![](./images/pubmed.png)
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![](./images/cora.png)  |  ![](./images/pubmed.png)
+
+![](./images/cora.png) ![](./images/pubmed.png)
 
 ## Requirements
 
