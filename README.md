@@ -31,11 +31,11 @@ sh scripts/noise_features_cora.sh
 
 ## Results
 
-Solarized dark             |  Solarized Ocean
-:-------------------------:|:-------------------------:
-![](./images/cora.png)  |  ![](./images/pubmed.png)
+### Filter Unuseless Features
 
-![](./images/cora.png) ![](./images/pubmed.png)
+|          Cora          |          Pubmed          |
+:-----------------------:|:------------------------:|
+| ![](./images/cora.png) | ![](./images/pubmed.png) |
 
 ## Requirements
 
