@@ -1,7 +1,8 @@
 from .data import (
     prepare_data,
     modify_train_mask,
-    add_noise_features
+    add_noise_features,
+    extract_test_nodes
 )
 from .train import (
     train,
@@ -20,6 +21,7 @@ __all__ = [
     'prepare_data',
     'modify_train_mask',
     'add_noise_features',
+    'extract_test_nodes'
     'train',
     'train_on_epoch',
     'evaluate',

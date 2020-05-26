@@ -1,4 +1,5 @@
 import os as os
+import numpy as np
 
 import torch
 
@@ -42,3 +43,10 @@ def add_noise_features(data, num_noise):
     data.x = torch.cat([data.x, noise_feat], dim=-1)
     
     return data
+
+
+def extract_test_nodes(data, num_samples):
+    test_indices = data.test_mask.cpu().numpy().nonzero()[0]
+    node_indices = np.random.choice(test_indices, num_samples).tolist()
+
+    return node_indices

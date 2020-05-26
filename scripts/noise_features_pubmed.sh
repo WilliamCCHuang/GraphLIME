@@ -9,5 +9,6 @@ python './exp_noise_features.py' \
     --rho 0.1 \
     --K 100 \
     --ymax 1.40 \
-    --threshold 0.01 \
+    --lime_samples 10 \
+    --greedy_threshold 0.01 \
     --seed 42
