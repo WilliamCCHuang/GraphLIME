@@ -19,6 +19,8 @@ explainer = GraphLIME(mode, hop=2, rho=0.1)
 coefs = explainer.explain_node(node_idx, data.x, data.edge_index)
 ```
 
+`coefs` are the coefficients of features. It corresponds to the $beta$ in the paper. The larger the value is, more important the corresponding feature is.
+
 ## Reproduce
 
 All scripts of different experiments are in `scripts` folder. You can reproduce the results by:
