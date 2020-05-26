@@ -32,6 +32,16 @@ sh scripts/noise_features_cora.sh
 ![](./images/cora.png)
 ![](./images/pubmed.png)
 
+## Requirements
+
+* python 3.6
+* torch 1.4.0
+* torch-geometric 1.4.3
+* numpy 1.17.2
+* scikit-learn 0.21.3
+* seaborn 0.10.1
+* matplotlib 2.2.4
+
 ## Change Log
 
 * 2020-05-26: first upload
