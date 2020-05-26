@@ -11,8 +11,8 @@ This implementation is easy to use. All you need to do is to instantiate a `Grap
 ```python
 from explainers import GraphLIME
 
-# data  # a `Data` object
-# model  # any GNN model
+data = ...  # a `Data` object
+model = ... # any GNN model
 node_idx = 0  # the specific node to be explained
 
 explainer = GraphLIME(mode, hop=2, rho=0.1)
