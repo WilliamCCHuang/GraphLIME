@@ -33,7 +33,7 @@ sh scripts/noise_features_cora.sh
 
 ### Filter Unuseless Features
 
-There are 10 random features added to the original features and then train a GNN model. We use several explanation methods to find out which features are important for the model. Then we plot the distribution of noise features selected by the explanation methods. Less noise feature is better.
+There are another 10 random features added to the original features and then we train a GNN model. We use several explanation methods to find out which features are important for the model. Then we plot the distribution of noise features selected by the explanation methods. Less noise features are better; that is, peak around the origin is good.
 
 <p float="middle">
   <img src="./images/cora.png" width="430" />
@@ -42,8 +42,8 @@ There are 10 random features added to the original features and then train a GNN
 
 ## Requirements
 
-* python 3.6
-* torch 1.4.0
+* python >= 3.6
+* torch >= 1.4.0
 * torch-geometric 1.4.3
 * numpy 1.17.2
 * scikit-learn 0.21.3
