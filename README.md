@@ -33,6 +33,8 @@ sh scripts/noise_features_cora.sh
 
 ### Filter Unuseless Features
 
+There are 10 random features added to the original features and then train a GNN model. We use several explanation methods to find out which features are important for the model. Then we plot the distribution of noise features selected by the explanation methods. Less noise feature is better.
+
 <p float="middle">
   <img src="./images/cora.png" width="430" />
   <img src="./images/pubmed.png" width="430" />
