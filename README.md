@@ -15,7 +15,7 @@ data = ...  # a `Data` object
 model = ... # any GNN model
 node_idx = 0  # the specific node to be explained
 
-explainer = GraphLIME(mode, hop=2, rho=0.1)
+explainer = GraphLIME(model, hop=2, rho=0.1)
 coefs = explainer.explain_node(node_idx, data.x, data.edge_index)
 ```
 
