@@ -19,7 +19,7 @@ explainer = GraphLIME(mode, hop=2, rho=0.1)
 coefs = explainer.explain_node(node_idx, data.x, data.edge_index)
 ```
 
-`coefs` are the coefficients of features, which are corresponding to the 𝜷 in the paper. The larger the value is, more important the corresponding feature is.
+`coefs` are the coefficients of features. They correspond to the 𝜷 in the paper. The larger the value is, more important the corresponding feature is.
 
 ## Reproduce
 
