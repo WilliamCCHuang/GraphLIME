@@ -1,4 +1,4 @@
+.DS_Store
 __pycache__
 data
-test.ipynb
-gcn.pth
+model.pth
