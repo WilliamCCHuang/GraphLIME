@@ -5,16 +5,16 @@ from sklearn.linear_model import Ridge, LassoLars
 
 import torch
 from torch_geometric.nn import MessagePassing
-
-from utils import k_hop_subgraph
+from torch_geometric.utils import k_hop_subgraph
+# from utils import k_hop_subgraph
 
 
 class GraphLIME:
     
     def __init__(self, model, hop=2, rho=0.1, cached=True):
-        self.model = model
         self.hop = hop
         self.rho = rho
+        self.model = model
         self.cached = cached
         self.cached_result = None
 
@@ -114,6 +114,7 @@ class GraphLIME:
         L_bar = L_bar.reshape(n ** 2,)  # (n ** 2,)
 
         solver = LassoLars(self.rho, fit_intercept=False, normalize=False, positive=True)
+
         solver.fit(K_bar * n, L_bar * n)
 
         return solver.coef_

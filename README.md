@@ -2,16 +2,16 @@
 
 GraphLIME is a model-agnostic, local, and nonlinear explanation method for GNN. It uses Hilbert-Schmit Independence Criterion (HSIC) Lasso, which is a nonlinear interpretable model. More details can be seen in the [paper](https://arxiv.org/pdf/2001.06216.pdf).
 
-This repo implements GraphLIME by using the awasome GNN library [PyTorch Geometric](https://github.com/rusty1s/pytorch_geometric), and reproduces the results of filtering useless features until now; that is, Figure 2 in the paper.
+This repo implements GraphLIME by using the awasome GNN library [PyTorch Geometric](https://github.com/rusty1s/pytorch_geometric), and reproduces the results of filtering useless features until now; that is, Figure 3 in the paper.
 
 ## Usage
 
-This implementation is easy to use. All you need to do is to instantiate a `GraphLIME` object first, and then explain the specific node by `explain_node` method.
+This implementation is easy to use. All you need to do is to confirm your model outputs log probability (for example, outputs by `F.log_softmax()`) first, and then instantiate a `GraphLIME` object, and finally explain the specific node by `explain_node` method.
 
 ```python
-from explainers import GraphLIME
+from graphlime import GraphLIME
 
-data = ...  # a `Data` object
+data = ...  # a `torch_geometric.data.Data` object
 model = ... # any GNN model
 node_idx = 0  # the specific node to be explained
 
@@ -33,7 +33,7 @@ sh scripts/noise_features_cora.sh
 
 ### Filter Unuseless Features
 
-There are another 10 random features added to the original features and then we train a GNN model. We use several explanation methods to find out which features are important for the model. Then we plot the distribution of noise features selected by the explanation methods. Less noise features are better; that is, peak around the origin is good.
+There are another 10 random features added to the original features and then we train a GNN model. We use several explanation methods to find out which features are important for the model. Then we plot the distribution of noise features selected by the explanation methods. Less noise features are better; that is, a peak around the origin is good.
 
 <p float="middle">
   <img src="./images/cora.png" width="350" />
@@ -43,8 +43,8 @@ There are another 10 random features added to the original features and then we 
 ## Requirements
 
 * python >= 3.6
-* torch >= 1.4.0
-* torch-geometric 1.4.3
+* torch >= 1.6.0
+* torch-geometric 1.6.0
 * numpy 1.17.2
 * scikit-learn 0.21.3
 * seaborn 0.10.1
