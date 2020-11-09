@@ -6,7 +6,6 @@ from sklearn.linear_model import Ridge, LassoLars
 import torch
 from torch_geometric.nn import MessagePassing
 from torch_geometric.utils import k_hop_subgraph
-# from utils import k_hop_subgraph
 
 
 class GraphLIME:
@@ -24,6 +23,7 @@ class GraphLIME:
         for module in self.model.modules():
             if isinstance(module, MessagePassing):
                 return module.flow
+                
         return 'source_to_target'
 
     def __subgraph__(self, node_idx, x, y, edge_index, **kwargs):
@@ -36,7 +36,7 @@ class GraphLIME:
         x = x[subset]
         y = y[subset]
 
-        for key, item in kwargs:
+        for key, item in kwargs.items():
             if torch.is_tensor(item) and item.size(0) == num_nodes:
                 item = item[subset]
             elif torch.is_tensor(item) and item.size(0) == num_edges:
@@ -53,7 +53,7 @@ class GraphLIME:
                         x.size(0), self.cached_result.size(0)))
 
         if not self.cached or self.cached_result is None:
-            # Get the initial prediction.
+            # get the initial prediction
             with torch.no_grad():
                 log_logits = self.model(x=x, edge_index=edge_index, **kwargs)
                 probas = log_logits.exp()
@@ -138,7 +138,7 @@ class LIME:
                         x.size(0), self.cached_result.size(0)))
 
         if not self.cached or self.cached_result is None:
-            # Get the initial prediction.
+            # get the initial prediction
             with torch.no_grad():
                 log_logits = self.model(x=x, edge_index=edge_index, **kwargs)
                 probas = log_logits.exp()
@@ -195,7 +195,7 @@ class Greedy:
                         x.size(0), self.cached_result.size(0)))
 
         if not self.cached or self.cached_result is None:
-            # Get the initial prediction.
+            # get the initial prediction
             with torch.no_grad():
                 log_logits = self.model(x=x, edge_index=edge_index, **kwargs)
                 probas = log_logits.exp()
