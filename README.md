@@ -52,5 +52,6 @@ There are another 10 random features added to the original features and then we 
 
 ## Change Log
 
+* 2020-11-09: fixed bug
 * 2020-10-08: modified the file structure for publishing to PyPI
 * 2020-05-26: first uploaded
