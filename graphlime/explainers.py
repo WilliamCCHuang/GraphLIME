@@ -23,7 +23,7 @@ class GraphLIME:
         for module in self.model.modules():
             if isinstance(module, MessagePassing):
                 return module.flow
-                
+
         return 'source_to_target'
 
     def __subgraph__(self, node_idx, x, y, edge_index, **kwargs):
