@@ -99,8 +99,8 @@ class GraphLIME:
         x, probas, _, _, _, _ = self.__subgraph__(
             node_idx, x, probas, edge_index, **kwargs)
 
-        x = x.detach().numpy()  # (n, d)
-        y = probas.detach().numpy()  # (n, classes)
+        x = x.detach().cpu().numpy()  # (n, d)
+        y = probas.detach().cpu().numpy()  # (n, classes)
 
         n, d = x.shape
 
@@ -154,7 +154,7 @@ class LIME:
         x_ = copy.deepcopy(x)
         original_feats = x[node_idx, :]
 
-        sample_x = [original_feats.detach().numpy()]
+        sample_x = [original_feats.detach().cpu().numpy()]
         sample_y = [proba.item()]
         
         for _ in tqdm(range(self.num_samples), desc='collect samples', leave=False):
@@ -166,7 +166,7 @@ class LIME:
 
             proba_ = probas_[node_idx, label]
 
-            sample_x.append(x_[node_idx, :].detach().numpy())
+            sample_x.append(x_[node_idx, :].detach().cpu().numpy())
             sample_y.append(proba_.item())
 
         sample_x = np.array(sample_x)
