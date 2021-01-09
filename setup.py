@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name="graphlime",
-    version="0.1.2",
+    version="1.2.0",
     author="williamcchuang",
     author_email="hang6318179@gmail.com",
     description="A package",
