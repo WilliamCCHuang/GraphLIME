@@ -1,6 +1,5 @@
-import os
-os.sys.path.append('/Users/william/Documents/AI/github/graphlime')
-os.sys.path.append('/Users/william/Documents/AI/github/graphlime/graphlime')
+from os import sys, path as osp
+sys.path.append(osp.dirname(osp.dirname(osp.dirname(__file__))))
 
 import random
 import argparse
@@ -12,7 +11,8 @@ import matplotlib.pyplot as plt
 import torch
 
 from models import GAT
-from graphlime import GraphLIME, LIME, Greedy, Random
+from graphlime import GraphLIME
+from other_explainers import LIME, Greedy, Random
 from utils import prepare_data, extract_test_nodes, train, evaluate, plot_dist
 
 warnings.filterwarnings('ignore')
@@ -21,6 +21,8 @@ INPUT_DIM = {
     'Cora': 1433,
     'Pubmed': 500
 }
+
+DIRNAME = osp.dirname(__file__)
 
 
 def build_args():
@@ -149,8 +151,6 @@ def main():
     model = GAT(**hparams).to(device)
     data = data.to(device)
 
-    # model_path = '/Users/william/Documents/AI/github/graphlime/examples/noise_features/model.pth'
-    # model.load_state_dict(torch.load(model_path))
     train(model, data, args)
     test_loss, test_acc = evaluate(model, data, mask=data.test_mask)
     print('test_loss: {:.4f}, test_acc: {:.4f}'.format(test_loss, test_acc))
@@ -175,7 +175,7 @@ def main():
     noise_feats = find_noise_feats_by_random(data, args)
     plot_dist(noise_feats, label='Random', ymax=args.ymax, color='k',
               title=f'Distribution of noisy features on {args.dataset} for {model.__class__.__name__}',
-              save_path=f'./images/{args.dataset.lower()}.png')
+              save_path=f'{DIRNAME}/results/{args.dataset.lower()}.png')
     
     plt.show()
 
