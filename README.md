@@ -52,7 +52,7 @@ There are another 10 random features added to the original features and then we 
 
 ## Change Log
 
-* 2021-01-10: modified the file structure
+* 2021-01-10: modified the file structure & published to PyPI with version 1.2.0
 * 2020-11-26: fixed bug
 * 2020-11-09: fixed bug
 * 2020-10-08: modified the file structure for publishing to PyPI
