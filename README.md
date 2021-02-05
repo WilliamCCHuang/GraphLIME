@@ -54,8 +54,9 @@ There are another 10 random features added to the original features and then we 
 * seaborn 0.10.1
 * matplotlib 2.2.4
 
-## Change Log
+## Changing Log
 
+* 2021-02-05: add a tutorial file
 * 2021-01-10: modified the file structure & published to PyPI with version 1.2.0
 * 2020-11-26: fixed bug
 * 2020-11-09: fixed bug
