@@ -35,10 +35,10 @@ Example and details can be found in `tutorial.ipynb`.
 
 ## Reproduce
 
-All scripts of different experiments are in `scripts` folder. You can reproduce the results by:
+All scripts of different experiments are in the `scripts` folder. You can reproduce the results by running the following command:
 
 ```
-sh scripts/noise_features_cora.sh
+> sh scripts/noise_features_cora.sh
 ```
 
 ## Results
