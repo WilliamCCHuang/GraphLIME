@@ -21,6 +21,10 @@ coefs = explainer.explain_node(node_idx, data.x, data.edge_index)
 
 `coefs` are the coefficients of features. They correspond to the 𝜷 in the paper. The larger the value is, more important the corresponding feature is.
 
+## Tutorial
+
+Example and details can be found in `tutorial.ipynb`.
+
 ## Reproduce
 
 All scripts of different experiments are in `scripts` folder. You can reproduce the results by:
