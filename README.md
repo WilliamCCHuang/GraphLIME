@@ -4,6 +4,14 @@ GraphLIME is a model-agnostic, local, and nonlinear explanation method for GNN. 
 
 This repo implements GraphLIME by using the awasome GNN library [PyTorch Geometric](https://github.com/rusty1s/pytorch_geometric), and reproduces the results of filtering useless features until now; that is, Figure 3 in the paper.
 
+## Installation
+
+Just use pip to install.
+
+```
+> pip install graphlime
+```
+
 ## Usage
 
 This implementation is easy to use. All you need to do is to confirm your model outputs log probability (for example, outputs by `F.log_softmax()`) first, and then instantiate a `GraphLIME` object, and finally explain the specific node by `explain_node` method.
