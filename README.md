@@ -1,6 +1,6 @@
 # GraphLIME
 
-GraphLIME is a model-agnostic, local, and nonlinear explanation method for GNN. It uses Hilbert-Schmit Independence Criterion (HSIC) Lasso, which is a nonlinear interpretable model. More details can be seen in the [paper](https://arxiv.org/pdf/2001.06216.pdf).
+GraphLIME is a model-agnostic, local, and nonlinear explanation method for GNN in node classfication task. It uses Hilbert-Schmit Independence Criterion (HSIC) Lasso, which is a nonlinear interpretable model. More details can be seen in the [paper](https://arxiv.org/pdf/2001.06216.pdf).
 
 This repo implements GraphLIME by using the awasome GNN library [PyTorch Geometric](https://github.com/rusty1s/pytorch_geometric), and reproduces the results of filtering useless features until now; that is, Figure 3 in the paper.
 
@@ -14,7 +14,7 @@ Just use pip to install.
 
 ## Usage
 
-This implementation is easy to use. All you need to do is to confirm your model outputs log probability (for example, outputs by `F.log_softmax()`) first, and then instantiate a `GraphLIME` object, and finally explain the specific node by `explain_node` method.
+This implementation is easy to use. All you need to do is to confirm that your model outputs log probabilities (for example, outputs by `F.log_softmax()`) first, then instantiate a `GraphLIME` object, and finally explain the specific node by calling `explain_node()` method.
 
 ```python
 from graphlime import GraphLIME
