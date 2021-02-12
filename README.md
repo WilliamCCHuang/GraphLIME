@@ -48,8 +48,8 @@ All scripts of different experiments are in the `scripts` folder. You can reprod
 There are another 10 random features added to the original features and then we train a GNN model. We use several explanation methods to find out which features are important for the model. Then we plot the distribution of noise features selected by the explanation methods. Less noise features are better; that is, a peak around the origin is good.
 
 <p float="middle">
-  <img src="./examples/noise_features/results/cora.png" width="350" />
-  <img src="./examples/noise_features/results/pubmed.png" width="350" />
+  <img src="./exp/noise_features/results/cora.png" width="350" />
+  <img src="./exp/noise_features/results/pubmed.png" width="350" />
 </p>
 
 ## Requirements
@@ -64,6 +64,7 @@ There are another 10 random features added to the original features and then we 
 
 ## Changing Log
 
+* 2021-02-13: add GNNExplainer in the noise features experiment
 * 2021-02-05: add a tutorial file
 * 2021-01-10: modified the file structure & published to PyPI with version 1.2.0
 * 2020-11-26: fixed bug
