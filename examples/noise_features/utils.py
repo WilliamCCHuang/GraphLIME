@@ -89,7 +89,7 @@ def plot_dist(noise_feats, label=None, ymax=1.0, color=None, title=None, save_pa
 
 
 def train(model, data, args, verbose=True):
-    optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=5e-4)
+    optimizer = optim.Adam(model.parameters(), lr=args.model_lr, weight_decay=5e-4)
 
     train_loss_values, train_acc_values = [], []
     test_loss_values, test_acc_values = [], []
@@ -99,7 +99,7 @@ def train(model, data, args, verbose=True):
 
     model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model.pth')
 
-    for epoch in tqdm(range(args.epochs), desc='Training', leave=False):
+    for epoch in tqdm(range(args.model_epochs), desc='Training', leave=False):
         if epoch == 0:
             print('       |     Trainging     |     Validation     |')
             print('       |-------------------|--------------------|')

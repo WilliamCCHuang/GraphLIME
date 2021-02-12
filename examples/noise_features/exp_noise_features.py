@@ -9,6 +9,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 import torch
+from torch_geometric.nn import GNNExplainer
 
 from models import GAT
 from graphlime import GraphLIME
@@ -30,8 +31,8 @@ def build_args():
 
     # data
     parser.add_argument('--dataset', type=str, default='Cora', help='dataset')
-    parser.add_argument('--epochs', type=int, default=400, help='epochs for training a GNN model')
-    parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
+    parser.add_argument('--model_epochs', type=int, default=400, help='epochs for training a GNN model')
+    parser.add_argument('--model_lr', type=float, default=0.001, help='learning rate for training model')
     parser.add_argument('--test_samples', type=int, default=200, help='number of test samples')
     parser.add_argument('--num_noise', type=int, default=10, help='number of noise features to add')
 
@@ -39,6 +40,11 @@ def build_args():
     parser.add_argument('--hop', type=int, default=2, help='hops')
     parser.add_argument('--rho', type=float, default=0.15, help='rho')
     parser.add_argument('--K', type=int, default=300, help='top-K most importance features')
+
+    # GNNExplainer
+    parser.add_argument('--masks_epochs', type=int, default=200, help='epochs for training a GNNExplainer')
+    parser.add_argument('--masks_lr', type=float, default=0.01, help='learning rate for training GNNExplainer')
+    parser.add_argument('--masks_threshold', type=float, default=0.1, help='threshold of features for GNNExplainer')
 
     # LIME
     parser.add_argument('--lime_samples', type=int, default=50, help='generate samples for LIME')
@@ -82,6 +88,25 @@ def find_noise_feats_by_GraphLIME(model, data, args):
         num_noise_feat = sum(idx >= INPUT_DIM[args.dataset] for idx in feat_indices)
         num_noise_feats.append(num_noise_feat)
 
+    return num_noise_feats
+
+
+def find_noise_feats_by_GNNExplainer(model, data, args):
+    explainer = GNNExplainer(model, epochs=args.masks_epochs, lr=args.masks_lr, num_hops=args.hop, log=False)
+
+    node_indices = extract_test_nodes(data, args.test_samples)
+
+    num_noise_feats = []
+    for node_idx in tqdm(node_indices, desc='explain node', leave=False):
+        node_feat_mask, edge_mask = explainer.explain_node(node_idx, data.x, data.edge_index)
+        node_feat_mask = node_feat_mask.detach().cpu().numpy()
+
+        feat_indices = node_feat_mask.argsort()[-args.K:]
+        feat_indices = [idx for idx in feat_indices if node_feat_mask[idx] > args.masks_threshold]
+
+        num_noise_feat = sum(idx >= INPUT_DIM[args.dataset] for idx in feat_indices)
+        num_noise_feats.append(num_noise_feat)
+    
     return num_noise_feats
 
 
@@ -152,16 +177,21 @@ def main():
     data = data.to(device)
 
     train(model, data, args)
+    # model.load_state_dict(torch.load('./examples/noise_features/model.pth'))
     test_loss, test_acc = evaluate(model, data, mask=data.test_mask)
     print('test_loss: {:.4f}, test_acc: {:.4f}'.format(test_loss, test_acc))
 
     if test_acc < 0.8:
-        print('bad model. Please re-run.')
+        print('bad model! Please re-run!')
         exit()
     
     print('=== Explain by GraphLIME ===')
     noise_feats = find_noise_feats_by_GraphLIME(model, data, args)
     plot_dist(noise_feats, label='GraphLIME', ymax=args.ymax, color='g')
+
+    print('=== Explain by GNNExplainer ===')
+    noise_feats = find_noise_feats_by_GNNExplainer(model, data, args)
+    plot_dist(noise_feats, label='GNNExplainer', ymax=args.ymax, color='r')
 
     print('=== Explain by LIME ===')
     noise_feats = find_noise_feats_by_LIME(model, data, args)
