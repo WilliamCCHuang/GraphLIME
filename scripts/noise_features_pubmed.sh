@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python './examples/noise_features/exp_noise_features.py' \
+python './exp/noise_features/exp_noise_features.py' \
     --dataset Pubmed \
     --model_epochs 300 \
     --model_lr 0.005 \
